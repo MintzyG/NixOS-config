@@ -52,11 +52,7 @@
 
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw 
 
-  programs.hyprland = {
-	enable = true;
-	xwayland.enable = true;
-	nvidiaPatches = true;
-  };
+  programs.hyprland.enable = true;
 
   services.xserver = {
     enable = true;
@@ -66,7 +62,7 @@
     };
 
     displayManager = {
-      defaultSession = "hyprland";
+      defaultSession = "none+i3";
     };
 
 #    windowManager.i3 = {
@@ -131,7 +127,6 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sophia = {
     isNormalUser = true;
-    shell = pkgs.fish;
     description = "Sophia";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
@@ -140,8 +135,6 @@
     #  thunderbird
     ];
   };
-
-  programs.noisetorch.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -166,21 +159,29 @@
   pkgs.go
   pkgs.rustup
   pkgs.python39  
+  pkgs.python39Packages.numpy
+  pkgs.python39Packages.pillow
 
+  pkgs.xorg.xf86inputsynaptics
   pkgs.libgccjit
   pkgs.gcc49
   pkgs.gcc_multi
   pkgs.clang_15
   pkgs.binutils
+  pkgs.picom
+
+  pkgs.rofi  
 
   pkgs.htop
   pkgs.ranger
   pkgs.gh  
   pkgs.feh
   pkgs.ripgrep
+  pkgs.zip
   pkgs.neovim
   pkgs.scrot
   pkgs.xclip
+  pkgs.iwd
  
   pkgs.eww
 
@@ -191,8 +192,6 @@ fonts.fonts = with pkgs; [
   meslo-lgs-nf
   nerdfonts
 ];
-
-programs.fish.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -228,7 +227,9 @@ programs.fish.enable = true;
     home.packages = with pkgs; [ 
  
       oh-my-posh     
+      hyprland
       kitty
+      fish
       git
             
     ];
