@@ -52,7 +52,11 @@
 
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw 
 
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+	enable = true;
+	xwayland.enable = true;
+	nvidiaPatches = true;
+  };
 
   services.xserver = {
     enable = true;
@@ -62,7 +66,7 @@
     };
 
     displayManager = {
-      defaultSession = "none+i3";
+      defaultSession = "hyprland";
     };
 
 #    windowManager.i3 = {
@@ -74,7 +78,7 @@
 #    };
 
   };
-  
+
   # Configure keymap in X11
   services.xserver = {
     layout = "br";
@@ -87,7 +91,7 @@
   hardware.opengl.driSupport32Bit = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -106,27 +110,28 @@
     #media-session.enable = true;
   };
 
-  services.mpd = {
-    enable = true;
-    musicDirectory = "/home/sophia/Music/";
-    extraConfig = ''
-      audio_output {
-        type "pipewire"
-        name "My PipeWire"
-      }
-    '';
-
-    # Optional:
-    network.listenAddress = "any"; # if you want to allow non-localhost connections
-    startWhenNeeded = true; # systemd feature: only start MPD service upon connection to its socket
-  };
+#  services.mpd = {
+#    enable = true;
+#    musicDirectory = "/home/sophia/Music/";
+#    extraConfig = ''
+#      audio_output {
+#        type "pipewire"
+#        name "My PipeWire"
+#      }
+#    '';
+#
+#    # Optional:
+#    network.listenAddress = "any"; # if you want to allow non-localhost connections
+#    startWhenNeeded = true; # systemd feature: only start MPD service upon connection to its socket
+#  };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sophia = {
     isNormalUser = true;
+    # shell = pkgs.fish;
     description = "Sophia";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
@@ -135,6 +140,9 @@
     #  thunderbird
     ];
   };
+
+  # Noise filter
+  programs.noisetorch.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -147,51 +155,49 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-  pkgs.jetbrains.rider
+  # pkgs.jetbrains.rider
   pkgs.jetbrains.goland
   pkgs.godot
   pkgs.obsidian
   pkgs.vlc  
   pkgs.xfce.thunar
-  pkgs.ncmpcpp
+  # pkgs.ncmpcpp
   pkgs.gimp  
 
   pkgs.go
+  pkgs.git
   pkgs.rustup
   pkgs.python39  
-  pkgs.python39Packages.numpy
-  pkgs.python39Packages.pillow
+  pkgs.fish
+  pkgs.kitty
+  pkgs.oh-my-posh
 
-  pkgs.xorg.xf86inputsynaptics
   pkgs.libgccjit
   pkgs.gcc49
   pkgs.gcc_multi
   pkgs.clang_15
   pkgs.binutils
-  pkgs.picom
-
-  pkgs.rofi  
 
   pkgs.htop
   pkgs.ranger
   pkgs.gh  
   pkgs.feh
   pkgs.ripgrep
-  pkgs.zip
   pkgs.neovim
   pkgs.scrot
   pkgs.xclip
-  pkgs.iwd
- 
-  pkgs.eww
 
-  pkgs.qemu
+  # pkgs.eww
+
+  # pkgs.qemu
   ];
 
 fonts.fonts = with pkgs; [
   meslo-lgs-nf
   nerdfonts
 ];
+
+# programs.fish.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -220,30 +226,25 @@ fonts.fonts = with pkgs; [
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.11"; # Did you read the comment?
 
-  home-manager.users.sophia = { pkgs, ... }: {
+ # home-manager.users.sophia = { pkgs, ... }: {
 
-    home.stateVersion = "22.11";
+  #  home.stateVersion = "22.11";
 
-    home.packages = with pkgs; [ 
- 
-      oh-my-posh     
-      hyprland
-      kitty
-      fish
-      git
-            
-    ];
+   # home.packages = with pkgs; [ 
 
-    programs.oh-my-posh = {
-      enable = true;
-    };
 
-    programs.git = {
-      enable = true;
-      userEmail = "";
-      userName = "MintzyG";
-    };
+    #];
 
-  };
+    #programs.oh-my-posh = {
+    #  enable = true;
+    #};
+
+    #programs.git = {
+     # enable = true;
+     # userEmail = "";
+     # userName = "MintzyG";
+    #};
+
+  #};
 
 }
